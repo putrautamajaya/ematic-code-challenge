@@ -23,6 +23,7 @@ class App extends Component {
     };
     event.push(inputData);
     this.setState({ event, idCount });
+    alert("Add success");
   };
 
   handleEdit = id => {
@@ -34,6 +35,7 @@ class App extends Component {
       `editDescription${id}`
     ).value;
     this.setState({ event });
+    alert("Edit success");
   };
 
   handleDelete = id => {
@@ -42,6 +44,7 @@ class App extends Component {
     let index = event.indexOf(selectedEvent[0]);
     event.splice(index, 1);
     this.setState({ event });
+    alert("Delete success");
   };
 
   sortByName = () => {
@@ -121,29 +124,43 @@ class App extends Component {
 
   renderList = (data, showDetail, handleEdit, handleDelete, checked) => {
     return (
-      <div key={data.id}>
+      <div key={data.id} style={{ width: 600 }}>
         <div className="title" onClick={() => showDetail(data.id)}>
           <input
             type="checkbox"
+            className="check-box"
             defaultChecked={checked}
             onClick={() => this.handleDone(data.id, checked)}
           />
-          <p>{data.title}</p>
+          <div>
+            <p>Title: {data.title}</p>
+            <p style={{ color: "grey" }}>
+              Created At: {data.createdAt.toString()}
+            </p>
+          </div>
         </div>
 
         <div id={data.id} className="display-none content">
           <input
             id={`editTitle${data.id}`}
             type="text"
+            spellCheck="false"
+            placeholder="Title"
             defaultValue={data.title}
           />
           <textarea
             id={`editDescription${data.id}`}
             rows="4"
+            spellCheck="false"
+            placeholder="Description"
             defaultValue={data.description}
           />
-          <p>Event Created at: </p>
-          <p>{data.createdAt.toString()}</p>
+          <p style={{ color: "white", padding: "10px 0 0 0" }}>
+            Event Created at:{" "}
+          </p>
+          <p style={{ color: "white", padding: "0 10px 0 0" }}>
+            {data.createdAt.toString()}
+          </p>
           <div>
             <button type="submit" onClick={() => handleEdit(data.id)}>
               Edit
@@ -180,11 +197,27 @@ class App extends Component {
       <div className="container">
         <h1>To Do List :</h1>
         <h4>Search :</h4>
-        <input id="inputSearch" type="text" onKeyUp={search} />
+        <input
+          id="inputSearch"
+          type="text"
+          spellCheck="false"
+          style={{ width: "600px" }}
+          onKeyUp={search}
+        />
         <h4>Title :</h4>
-        <input id="title" type="text" />
+        <input
+          id="title"
+          type="text"
+          spellCheck="false"
+          style={{ width: "600px" }}
+        />
         <h4>Description :</h4>
-        <input id="description" type="text" />
+        <input
+          id="description"
+          type="text"
+          spellCheck="false"
+          style={{ width: "600px" }}
+        />
         <br />
         <button type="submit" onClick={handleAdd}>
           Add
@@ -196,11 +229,12 @@ class App extends Component {
           Sort By Created At
         </button>
 
+        <p style={{ padding: "20px 0 10px 0" }}>To do: {event.length}</p>
         {eventList.map(data =>
           this.renderList(data, showDetail, handleEdit, handleDelete, false)
         )}
 
-        <p>Done: </p>
+        <p style={{ padding: "20px 0 10px 0" }}>Done: {eventDone.length}</p>
         {eventDone.map(data =>
           this.renderList(data, showDetail, handleEdit, handleDelete, true)
         )}
